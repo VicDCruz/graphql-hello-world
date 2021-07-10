@@ -5,6 +5,7 @@ import App from './components/App';
 import reportWebVitals from './reportWebVitals';
 import { setContext } from '@apollo/client/link/context';
 import { BrowserRouter } from 'react-router-dom';
+import { AUTH_TOKEN } from './constants';
 
 import {
   ApolloProvider,
@@ -18,11 +19,12 @@ const httpLink = createHttpLink({
 });
 
 const authLink = setContext((_, { headers }) => {
+  const token = localStorage.getItem(AUTH_TOKEN);
   // return the headers to the context so httpLink can read them
   return {
     headers: {
       ...headers,
-      authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsImlhdCI6MTYyNTc5NDIyMX0.1qLNm4Id2KyYdAngyeu4Cc95w9jGi1DjCT4FQwCbpDo',
+      authorization: token ? `Bearer ${token}` : '',
     }
   }
 });
